@@ -3144,6 +3144,8 @@ bool CServer::GetPlayerClassEnabled(int PlayerClass) const
 			return g_Config.m_InfEnableHero;
 		case PLAYERCLASS_ENGINEER:
 			return g_Config.m_InfEnableEngineer;
+		case PLAYERCLASS_ELECTRICIAN:
+			return g_Config.m_InfEnableElectrician;
 		case PLAYERCLASS_SOLDIER:
 			return g_Config.m_InfEnableSoldier;
 		case PLAYERCLASS_NINJA:
