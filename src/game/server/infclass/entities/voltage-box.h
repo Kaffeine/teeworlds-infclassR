@@ -11,8 +11,17 @@ public:
 	static int EntityId;
 
 	CVoltageBox(CGameContext *pGameContext, vec2 CenterPos, int Owner);
+	~CVoltageBox() override;
 
 	void Snap(int SnappingClient) override;
+	
+protected:
+	enum
+	{
+		EDGES = 4,
+	};
+
+	int m_ExtraIDs[EDGES];
 };
 
 #endif // GAME_SERVER_INFCLASS_ENTITIES_VOLTAGE_BOX_H
