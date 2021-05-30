@@ -202,6 +202,9 @@ void CInfClassPlayerClass::OnCharacterSpawned()
 
 void CInfClassPlayerClass::OnCharacterDeath(int Killer, int Weapon)
 {
+	if (m_pCharacter->m_Core.m_Passenger) {
+		m_pCharacter->m_Core.SetPassenger(nullptr);
+	}
 }
 
 void CInfClassPlayerClass::OnWeaponFired(WeaponFireContext *pFireContext)

@@ -1323,13 +1323,7 @@ void CInfClassCharacter::Die(int Killer, int Weapon)
 	GameWorld()->m_Core.m_apCharacters[m_pPlayer->GetCID()] = 0;
 	GameServer()->CreateDeath(GetPos(), m_pPlayer->GetCID());
 
-/* INFECTION MODIFICATION START ***************************************/
 	GetClass()->OnCharacterDeath(Killer, Weapon);
-
-	if (m_Core.m_Passenger) {
-		m_Core.SetPassenger(nullptr);
-	}
-/* INFECTION MODIFICATION END *****************************************/
 
 	if(pKillerCharacter && (pKillerCharacter != this))
 	{
