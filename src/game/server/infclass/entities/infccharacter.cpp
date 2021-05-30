@@ -1324,29 +1324,10 @@ void CInfClassCharacter::Die(int Killer, int Weapon)
 	GameServer()->CreateDeath(GetPos(), m_pPlayer->GetCID());
 
 /* INFECTION MODIFICATION START ***************************************/
+	GetClass()->OnCharacterDeath(Weapon);
 
-	if(GetPlayerClass() == PLAYERCLASS_BOOMER && !IsFrozen() && Weapon != WEAPON_GAME && !(IsInLove() && Weapon == WEAPON_SELF) )
-	{
-		GameServer()->CreateSound(GetPos(), SOUND_GRENADE_EXPLODE);
-		GameServer()->CreateExplosionDisk(GetPos(), 60.0f, 80.5f, 14, 52.0f, m_pPlayer->GetCID(), WEAPON_HAMMER, TAKEDAMAGEMODE_INFECTION);
-	}
-	
-	if(GetPlayerClass() == PLAYERCLASS_WITCH)
-	{
-		m_pPlayer->StartInfection(true);
-		GameServer()->SendBroadcast_Localization(-1, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("The witch is dead"), NULL);
-		GameServer()->CreateSoundGlobal(SOUND_CTF_RETURN);
-	}
-	else if(GetPlayerClass() == PLAYERCLASS_UNDEAD)
-	{
-		m_pPlayer->StartInfection(true);
-		GameServer()->SendBroadcast_Localization(-1, BROADCAST_PRIORITY_GAMEANNOUNCE, BROADCAST_DURATION_GAMEANNOUNCE, _("The undead is finally dead"), NULL);
-		GameServer()->CreateSoundGlobal(SOUND_CTF_RETURN);
-	}
-	else
-	{
-		m_pPlayer->Infect(pKillerPlayer);
-	}
+	m_pPlayer->Infect(pKillerPlayer);
+
 	if (m_Core.m_Passenger) {
 		m_Core.SetPassenger(nullptr);
 	}

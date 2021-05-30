@@ -200,6 +200,10 @@ void CInfClassPlayerClass::OnCharacterSpawned()
 	GiveClassAttributes();
 }
 
+void CInfClassPlayerClass::OnCharacterDeath(int Weapon)
+{
+}
+
 void CInfClassPlayerClass::OnWeaponFired(WeaponFireContext *pFireContext)
 {
 	switch(pFireContext->Weapon)
