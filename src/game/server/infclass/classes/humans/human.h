@@ -14,6 +14,8 @@ public:
 
 	bool IsHuman() const final { return true; }
 
+	void OnCharacterDeath(int Killer, int Weapon) override;
+
 	void OnSlimeEffect(int Owner) override;
 
 	static bool SetupSkin(int PlayerClass, CTeeInfo *output);

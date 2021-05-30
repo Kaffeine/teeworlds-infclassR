@@ -20,7 +20,7 @@ void CInfClassInfected::OnCharacterSpawned()
 	m_HealTick = 0;
 }
 
-void CInfClassInfected::OnCharacterDeath(int Weapon)
+void CInfClassInfected::OnCharacterDeath(int Killer, int Weapon)
 {
 	switch(PlayerClass())
 	{

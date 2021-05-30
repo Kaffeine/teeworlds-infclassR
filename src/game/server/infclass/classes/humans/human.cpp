@@ -5,6 +5,7 @@
 #include <game/server/gamecontext.h>
 #include <game/server/infclass/entities/infccharacter.h>
 #include <game/server/infclass/infcgamecontroller.h>
+#include <game/server/infclass/infcplayer.h>
 #include <game/server/teeinfo.h>
 
 MACRO_ALLOC_POOL_ID_IMPL(CInfClassHuman, MAX_CLIENTS)
@@ -12,6 +13,12 @@ MACRO_ALLOC_POOL_ID_IMPL(CInfClassHuman, MAX_CLIENTS)
 CInfClassHuman::CInfClassHuman(CInfClassPlayer *pPlayer)
 	: CInfClassPlayerClass(pPlayer)
 {
+}
+
+void CInfClassHuman::OnCharacterDeath(int Killer, int Weapon)
+{
+	CInfClassPlayer* pKillerPlayer = GameController()->GetPlayer(Killer);
+	m_pPlayer->Infect(pKillerPlayer);
 }
 
 void CInfClassHuman::GiveClassAttributes()
