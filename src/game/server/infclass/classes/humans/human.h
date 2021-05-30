@@ -15,6 +15,7 @@ public:
 	bool IsHuman() const final { return true; }
 
 	void OnCharacterDeath(int Killer, int Weapon) override;
+	void OnThisKilledAnotherCharacter() override;
 
 	void OnSlimeEffect(int Owner) override;
 

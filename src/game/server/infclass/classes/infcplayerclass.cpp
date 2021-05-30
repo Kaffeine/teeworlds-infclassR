@@ -193,6 +193,10 @@ void CInfClassPlayerClass::OnCharacterDeath(int Killer, int Weapon)
 	}
 }
 
+void CInfClassPlayerClass::OnThisKilledAnotherCharacter()
+{
+}
+
 void CInfClassPlayerClass::OnWeaponFired(WeaponFireContext *pFireContext)
 {
 	switch(pFireContext->Weapon)

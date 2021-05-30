@@ -23,6 +23,18 @@ void CInfClassHuman::OnCharacterDeath(int Killer, int Weapon)
 	m_pPlayer->Infect(pKillerPlayer);
 }
 
+void CInfClassHuman::OnThisKilledAnotherCharacter()
+{
+	// set attacker's face to happy (taunt!)
+	m_pCharacter->SetEmote(EMOTE_HAPPY, Server()->Tick() + Server()->TickSpeed());
+	m_pCharacter->CheckSuperWeaponAccess();
+
+	if(m_pCharacter->GetPlayerClass() == PLAYERCLASS_MERCENARY)
+	{
+		m_pCharacter->GiveWeapon(WEAPON_LASER, m_pCharacter->m_aWeapons[WEAPON_LASER].m_Ammo + 3);
+	}
+}
+
 void CInfClassHuman::GiveClassAttributes()
 {
 	CInfClassPlayerClass::GiveClassAttributes();
