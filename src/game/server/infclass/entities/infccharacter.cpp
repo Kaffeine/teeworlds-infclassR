@@ -1324,17 +1324,9 @@ void CInfClassCharacter::Die(int Killer, int Weapon)
 	GameServer()->CreateDeath(GetPos(), m_pPlayer->GetCID());
 
 	GetClass()->OnCharacterDeath(Killer, Weapon);
-
 	if(pKillerCharacter && (pKillerCharacter != this))
 	{
-		// set attacker's face to happy (taunt!)
-		pKillerCharacter->SetEmote(EMOTE_HAPPY, Server()->Tick() + Server()->TickSpeed());
-		pKillerCharacter->CheckSuperWeaponAccess();
-
-		if(pKillerCharacter->GetPlayerClass() == PLAYERCLASS_MERCENARY)
-		{
-			pKillerCharacter->GiveWeapon(WEAPON_LASER, m_aWeapons[WEAPON_LASER].m_Ammo + 3);
-		}
+		pKillerCharacter->GetClass()->OnThisKilledAnotherCharacter();
 	}
 }
 

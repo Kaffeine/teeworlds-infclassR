@@ -44,6 +44,7 @@ public:
 	virtual void OnCharacterTick();
 	virtual void OnCharacterSpawned();
 	virtual void OnCharacterDeath(int Killer, int Weapon);
+	virtual void OnThisKilledAnotherCharacter();
 
 	virtual void OnWeaponFired(WeaponFireContext *pFireContext);
 
