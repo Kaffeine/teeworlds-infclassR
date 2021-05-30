@@ -17,6 +17,8 @@ CInfClassHuman::CInfClassHuman(CInfClassPlayer *pPlayer)
 
 void CInfClassHuman::OnCharacterDeath(int Killer, int Weapon)
 {
+	CInfClassPlayerClass::OnCharacterDeath(Killer, Weapon);
+
 	CInfClassPlayer* pKillerPlayer = GameController()->GetPlayer(Killer);
 	m_pPlayer->Infect(pKillerPlayer);
 }

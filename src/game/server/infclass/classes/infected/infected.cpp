@@ -22,6 +22,8 @@ void CInfClassInfected::OnCharacterSpawned()
 
 void CInfClassInfected::OnCharacterDeath(int Killer, int Weapon)
 {
+	CInfClassPlayerClass::OnCharacterDeath(Killer, Weapon);
+
 	switch(PlayerClass())
 	{
 		case PLAYERCLASS_BOOMER:
