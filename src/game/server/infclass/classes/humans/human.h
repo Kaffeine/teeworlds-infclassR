@@ -22,6 +22,9 @@ public:
 	static bool SetupSkin(int PlayerClass, CTeeInfo *output);
 
 protected:
+	void CheckSuperWeaponAccess();
+	void MaybeGiveStunGrenades();
+
 	void GiveClassAttributes() override;
 	void SetupSkin(CTeeInfo *output) override;
 };
