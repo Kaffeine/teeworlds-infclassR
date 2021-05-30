@@ -187,7 +187,6 @@ protected:
 	int m_HookDmgTick;
 	int m_InvisibleTick;
 	bool m_IsInvisible;
-	int m_HealTick;
 	int m_BonusTick;
 	int m_InfZoneTick;
 	int m_ProtectionTick;

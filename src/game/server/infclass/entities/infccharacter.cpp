@@ -1567,6 +1567,16 @@ void CInfClassCharacter::GiveRandomClassSelectionBonus()
 	IncreaseArmor(10);
 }
 
+void CInfClassCharacter::SetInfZoneTick(int Tick)
+{
+	m_InfZoneTick = Tick;
+}
+
+void CInfClassCharacter::ResetInfZoneTick()
+{
+	m_InfZoneTick = -1;
+}
+
 void CInfClassCharacter::PreCoreTick()
 {
 	UpdateTuningParam();

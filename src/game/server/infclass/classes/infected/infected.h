@@ -16,6 +16,8 @@ public:
 	int GetDefaultEmote() const override;
 	bool CanDie() const override;
 
+	void HandleDamageZone(int ZoneValue) override;
+
 	void OnCharacterTick() override;
 	void OnCharacterSpawned() override;
 	void OnCharacterDeath(int Killer, int Weapon) override;
@@ -36,6 +38,7 @@ protected:
 	void SetHookOnLimit(bool OnLimit);
 
 	int m_SlimeHealTick = 0;
+	int m_InfZoneHealTick = 0;
 
 	int m_VoodooTimeAlive = 0;
 	int m_VoodooKiller; // Save killer + weapon for delayed kill message

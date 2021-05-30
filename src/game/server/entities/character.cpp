@@ -66,7 +66,6 @@ m_pConsole(pConsole)
 	m_PositionLockTick = -Server()->TickSpeed()*10;
 	m_PositionLocked = false;
 	m_PositionLockAvailable = false;
-	m_HealTick = 0;
 	m_InfZoneTick = -1;
 	m_InAirTick = 0;
 	m_InWater = 0;
@@ -776,70 +775,7 @@ void CCharacter::Tick()
 	
 	{
 		int Index0 = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_icDamage, m_Pos.x+m_ProximityRadius/3.f, m_Pos.y-m_ProximityRadius/3.f);
-		
-		if(Index0 == ZONE_DAMAGE_DEATH)
-		{
-			Die(m_pPlayer->GetCID(), WEAPON_WORLD);
-		}
-		else if(GetPlayerClass() != PLAYERCLASS_UNDEAD && (Index0 == ZONE_DAMAGE_DEATH_NOUNDEAD))
-		{
-			Die(m_pPlayer->GetCID(), WEAPON_WORLD);
-		}
-		else if(IsZombie() && (Index0 == ZONE_DAMAGE_DEATH_INFECTED))
-		{
-			Die(m_pPlayer->GetCID(), WEAPON_WORLD);
-		}
-		else if(m_Alive && (Index0 == ZONE_DAMAGE_INFECTION))
-		{
-			if(IsZombie())
-			{
-				if(Server()->Tick() >= m_HealTick + (Server()->TickSpeed()/g_Config.m_InfInfzoneHealRate))
-				{
-					m_HealTick = Server()->Tick();
-					if(GameServer()->GetZombieCount() == 1)
-					{
-						// See also: Character::GiveArmorIfLonely()
-						IncreaseOverallHp(1);
-					}
-					else
-					{
-						IncreaseHealth(1);
-					}
-				}
-				if (m_InfZoneTick < 0) {
-					m_InfZoneTick = Server()->Tick(); // Save Tick when zombie enters infection zone
-					GrantSpawnProtection();
-				}
-			}
-			else
-			{
-				CPlayer *pKiller = nullptr;
-				for(CCharacter *pHooker = (CCharacter*) GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_CHARACTER); pHooker; pHooker = (CCharacter *)pHooker->TypeNext())
-				{
-					if (pHooker->GetPlayer() && pHooker->m_Core.m_HookedPlayer == m_pPlayer->GetCID())
-					{
-						if (pKiller) {
-							// More than one player hooked this victim
-							// We don't support cooperative killing
-							pKiller = nullptr;
-							break;
-						}
-						pKiller = pHooker->GetPlayer();
-					}
-				}
-
-				m_pPlayer->Infect(pKiller);
-
-				if (g_Config.m_InfInfzoneFreezeDuration > 0)
-				{
-					Freeze(g_Config.m_InfInfzoneFreezeDuration, GetPlayer()->GetCID(), FREEZEREASON_INFECTION);
-				}
-			}
-		}
-		if(m_Alive && (Index0 != ZONE_DAMAGE_INFECTION))
-		{
-			m_InfZoneTick = -1;// Reset Tick when zombie is not in infection zone
-		}
+		GameServer()->m_pController->HandleCharacterDamageZone(this, Index0);
 	}
 	
 	if(m_PositionLockTick > 0)

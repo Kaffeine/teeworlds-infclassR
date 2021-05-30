@@ -14,6 +14,8 @@ public:
 
 	bool IsHuman() const final { return true; }
 
+	void HandleDamageZone(int ZoneValue) override;
+
 	void OnCharacterTick() override;
 	void OnCharacterDeath(int Killer, int Weapon) override;
 	void OnThisKilledAnotherCharacter() override;

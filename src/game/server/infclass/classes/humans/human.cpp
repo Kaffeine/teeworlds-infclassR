@@ -16,6 +16,37 @@ CInfClassHuman::CInfClassHuman(CInfClassPlayer *pPlayer)
 {
 }
 
+void CInfClassHuman::HandleDamageZone(int ZoneValue)
+{
+	CInfClassPlayerClass::HandleDamageZone(ZoneValue);
+
+	if(m_pCharacter->IsAlive() && (ZoneValue == ZONE_DAMAGE_INFECTION))
+	{
+		CPlayer *pKiller = nullptr;
+		for(CCharacter *pHooker = (CCharacter*) GameServer()->m_World.FindFirst(CGameWorld::ENTTYPE_CHARACTER); pHooker; pHooker = (CCharacter *)pHooker->TypeNext())
+		{
+			if (pHooker->GetPlayer() && pHooker->m_Core.m_HookedPlayer == GetCID())
+			{
+				if (pKiller) {
+					// More than one player hooked this victim
+					// We don't support cooperative killing
+					pKiller = nullptr;
+					break;
+				}
+				pKiller = pHooker->GetPlayer();
+			}
+		}
+
+		if (Config()->m_InfInfzoneFreezeDuration > 0)
+		{
+			// Freeze *before* the infect, because infection changes the class
+			m_pCharacter->Freeze(Config()->m_InfInfzoneFreezeDuration, GetCID(), FREEZEREASON_INFECTION);
+		}
+
+		m_pPlayer->Infect(pKiller);
+	}
+}
+
 void CInfClassHuman::OnCharacterTick()
 {
 	if(PlayerClass() == PLAYERCLASS_SNIPER && m_pCharacter->m_PositionLocked)

@@ -71,6 +71,7 @@ void CInfClassInfected::OnCharacterSpawned()
 	CInfClassPlayerClass::OnCharacterSpawned();
 
 	m_SlimeHealTick = 0;
+	m_InfZoneHealTick = 0;
 }
 
 void CInfClassInfected::OnCharacterDeath(int Killer, int Weapon)
@@ -262,6 +263,34 @@ void CInfClassInfected::IncreaseGhoulLevel(int Diff)
 int CInfClassInfected::GetGhoulLevel() const
 {
 	return GetPlayer()->GetGhoulLevel();
+}
+
+void CInfClassInfected::HandleDamageZone(int ZoneValue)
+{
+	CInfClassPlayerClass::HandleDamageZone(ZoneValue);
+
+	if(m_pCharacter->IsAlive() && (ZoneValue == ZONE_DAMAGE_INFECTION))
+	{
+		if(Server()->Tick() >= m_InfZoneHealTick + (Server()->TickSpeed()/Config()->m_InfInfzoneHealRate))
+		{
+			m_InfZoneHealTick = Server()->Tick();
+			if(GameServer()->GetZombieCount() == 1)
+			{
+				// See also: Character::GiveArmorIfLonely()
+				m_pCharacter->IncreaseOverallHp(1);
+			}
+			else
+			{
+				m_pCharacter->IncreaseHealth(1);
+			}
+		}
+
+		if (m_pCharacter->GetInfZoneTick() < 0)
+		{
+			m_pCharacter->SetInfZoneTick(Server()->Tick()); // Save Tick when zombie enters infection zone
+			m_pCharacter->GrantSpawnProtection();
+		}
+	}
 }
 
 void CInfClassInfected::PrepareToDie(int Killer, int Weapon, bool *pRefusedToDie)

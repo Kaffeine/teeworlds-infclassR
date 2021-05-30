@@ -127,6 +127,8 @@ public:
 	*/
 	virtual void OnCharacterSpawn(class CCharacter *pChr);
 
+	virtual void HandleCharacterDamageZone(class CCharacter *pChr, int ZoneValue);
+
 	/*
 		Function: on_CCharacter_death
 			Called when a CCharacter in the world dies.
