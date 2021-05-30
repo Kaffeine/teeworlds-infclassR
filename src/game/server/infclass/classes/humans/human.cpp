@@ -4,6 +4,7 @@
 #include <game/server/classes.h>
 #include <game/server/gamecontext.h>
 #include <game/server/infclass/entities/infccharacter.h>
+#include <game/server/infclass/entities/superweapon-indicator.h>
 #include <game/server/infclass/infcgamecontroller.h>
 #include <game/server/infclass/infcplayer.h>
 #include <game/server/teeinfo.h>
@@ -27,7 +28,7 @@ void CInfClassHuman::OnThisKilledAnotherCharacter()
 {
 	// set attacker's face to happy (taunt!)
 	m_pCharacter->SetEmote(EMOTE_HAPPY, Server()->Tick() + Server()->TickSpeed());
-	m_pCharacter->CheckSuperWeaponAccess();
+	CheckSuperWeaponAccess();
 
 	if(m_pCharacter->GetPlayerClass() == PLAYERCLASS_MERCENARY)
 	{
@@ -172,6 +173,62 @@ bool CInfClassHuman::SetupSkin(int PlayerClass, CTeeInfo *output)
 	}
 
 	return true;
+}
+
+void CInfClassHuman::CheckSuperWeaponAccess()
+{
+	// check kills of player
+	int kills = m_pPlayer->GetNumberKills();
+
+	//Only scientists can receive white holes
+	if(PlayerClass() == PLAYERCLASS_SCIENTIST)
+	{
+		if (!m_pCharacter->m_HasWhiteHole) // Can't receive a white hole while having one available
+		{
+			// enable white hole probabilities
+			if (kills > Config()->m_InfWhiteHoleMinimalKills)
+			{
+				if (random_int(0,100) < Config()->m_InfWhiteHoleProbability)
+				{
+					//Scientist-laser.cpp will make it unavailable after usage and reset player kills
+
+					//create an indicator object
+					if (m_pCharacter->m_HasIndicator == false) {
+						m_pCharacter->m_HasIndicator = true;
+						GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_SCORE, _("white hole found, adjusting scientific parameters..."), NULL);
+						new CSuperWeaponIndicator(GameServer(), GetPos(), m_pPlayer->GetCID());
+					}
+				}
+			}
+		}
+	}
+
+	if(PlayerClass() == PLAYERCLASS_LOOPER)
+	{
+		MaybeGiveStunGrenades();
+	}
+
+	if(PlayerClass() == PLAYERCLASS_SOLDIER)
+	{
+		MaybeGiveStunGrenades();
+	}
+}
+
+void CInfClassHuman::MaybeGiveStunGrenades()
+{
+	if(m_pCharacter->m_HasStunGrenade)
+		return;
+
+	if(m_pPlayer->GetNumberKills() > Config()->m_InfStunGrenadeMinimalKills)
+	{
+		if(random_int(0,100) < Config()->m_InfStunGrenadeProbability)
+		{
+				//grenade launcher usage will make it unavailable and reset player kills
+
+				m_pCharacter->m_HasStunGrenade = true;
+				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_SCORE, _("stun grenades found..."), NULL);
+		}
+	}
 }
 
 void CInfClassHuman::SetupSkin(CTeeInfo *output)
