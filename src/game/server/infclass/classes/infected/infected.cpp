@@ -20,6 +20,34 @@ void CInfClassInfected::OnCharacterSpawned()
 	m_HealTick = 0;
 }
 
+void CInfClassInfected::OnCharacterDeath(int Weapon)
+{
+	switch(PlayerClass())
+	{
+		case PLAYERCLASS_BOOMER:
+			if (!m_pCharacter->IsFrozen() && Weapon != WEAPON_GAME && !(m_pCharacter->IsInLove() && Weapon == WEAPON_SELF))
+			{
+				GameServer()->CreateSound(GetPos(), SOUND_GRENADE_EXPLODE);
+				GameServer()->CreateExplosionDisk(GetPos(), 60.0f, 80.5f, 14, 52.0f, m_pPlayer->GetCID(), WEAPON_HAMMER, TAKEDAMAGEMODE_INFECTION);
+			}
+			break;
+		case PLAYERCLASS_WITCH:
+			m_pPlayer->StartInfection(true);
+			GameServer()->SendBroadcast_Localization(-1, BROADCAST_PRIORITY_GAMEANNOUNCE,
+			                                         BROADCAST_DURATION_GAMEANNOUNCE, _("The witch is dead"), NULL);
+			GameServer()->CreateSoundGlobal(SOUND_CTF_RETURN);
+			break;
+		case PLAYERCLASS_UNDEAD:
+			m_pPlayer->StartInfection(true);
+			GameServer()->SendBroadcast_Localization(-1, BROADCAST_PRIORITY_GAMEANNOUNCE,
+			                                         BROADCAST_DURATION_GAMEANNOUNCE, _("The undead is finally dead"), NULL);
+			GameServer()->CreateSoundGlobal(SOUND_CTF_RETURN);
+			break;
+		default:
+			break;
+	}
+}
+
 void CInfClassInfected::GiveClassAttributes()
 {
 	CInfClassPlayerClass::GiveClassAttributes();

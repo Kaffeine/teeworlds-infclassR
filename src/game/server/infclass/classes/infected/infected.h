@@ -15,6 +15,7 @@ public:
 	bool IsHuman() const final { return false; }
 
 	void OnCharacterSpawned() override;
+	void OnCharacterDeath(int Weapon) override;
 
 	void OnSlimeEffect(int Owner) override;
 	void OnFloatingPointCollected(int Points) override;
