@@ -43,7 +43,7 @@ public:
 	// Events
 	virtual void OnCharacterTick();
 	virtual void OnCharacterSpawned();
-	virtual void OnCharacterDeath(int Weapon);
+	virtual void OnCharacterDeath(int Killer, int Weapon);
 
 	virtual void OnWeaponFired(WeaponFireContext *pFireContext);
 

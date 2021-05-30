@@ -200,7 +200,7 @@ void CInfClassPlayerClass::OnCharacterSpawned()
 	GiveClassAttributes();
 }
 
-void CInfClassPlayerClass::OnCharacterDeath(int Weapon)
+void CInfClassPlayerClass::OnCharacterDeath(int Killer, int Weapon)
 {
 }
 

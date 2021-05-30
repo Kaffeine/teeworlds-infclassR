@@ -18,7 +18,7 @@ public:
 
 	void OnCharacterTick() override;
 	void OnCharacterSpawned() override;
-	void OnCharacterDeath(int Weapon) override;
+	void OnCharacterDeath(int Killer, int Weapon) override;
 
 	void OnSlimeEffect(int Owner) override;
 	void OnFloatingPointCollected(int Points) override;
