@@ -71,6 +71,9 @@ public:
 	bool CanOpenPortals() const;
 
 	void GiveRandomClassSelectionBonus();
+	
+	void SetInfZoneTick(int Tick);
+	void ResetInfZoneTick();
 
 protected:
 	void PreCoreTick() override;

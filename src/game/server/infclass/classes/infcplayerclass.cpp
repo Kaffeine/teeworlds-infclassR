@@ -151,6 +151,27 @@ void CInfClassPlayerClass::OnPlayerClassChanged()
 	}
 }
 
+void CInfClassPlayerClass::HandleDamageZone(int ZoneValue)
+{
+	if(ZoneValue == ZONE_DAMAGE_DEATH)
+	{
+		m_pCharacter->Die(GetCID(), WEAPON_WORLD);
+	}
+	else if(PlayerClass() != PLAYERCLASS_UNDEAD && (ZoneValue == ZONE_DAMAGE_DEATH_NOUNDEAD))
+	{
+		m_pCharacter->Die(GetCID(), WEAPON_WORLD);
+	}
+	else if(m_pCharacter->IsZombie() && (ZoneValue == ZONE_DAMAGE_DEATH_INFECTED))
+	{
+		m_pCharacter->Die(GetCID(), WEAPON_WORLD);
+	}
+
+	if(m_pCharacter->IsAlive() && (ZoneValue != ZONE_DAMAGE_INFECTION))
+	{
+		m_pCharacter->ResetInfZoneTick();
+	}
+}
+
 void CInfClassPlayerClass::PrepareToDie(int Killer, int Weapon, bool *pRefusedToDie)
 {
 }

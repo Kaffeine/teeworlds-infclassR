@@ -15,6 +15,8 @@ public:
 	bool IsHuman() const final { return false; }
 	bool CanDie() const override;
 
+	void HandleDamageZone(int ZoneValue) override;
+
 	void OnCharacterTick() override;
 	void OnCharacterSpawned() override;
 	void OnCharacterDeath(int Killer, int Weapon) override;
@@ -33,6 +35,7 @@ protected:
 	void SetupSkin(CTeeInfo *output) override;
 
 	int m_SlimeHealTick = 0;
+	int m_InfZoneHealTick = 0;
 
 	int m_VoodooTimeAlive = 0;
 	int m_VoodooKiller; // Save killer + weapon for delayed kill message

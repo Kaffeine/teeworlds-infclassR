@@ -623,6 +623,11 @@ CInfClassCharacter *CInfClassGameController::GetCharacter(int ClientID) const
 	return static_cast<CInfClassCharacter*>(GameServer()->GetPlayerChar(ClientID));
 }
 
+CInfClassCharacter *CInfClassGameController::GetInfCharacter(CCharacter *pCharacter) const
+{
+	return static_cast<CInfClassCharacter*>(pCharacter);
+}
+
 void CInfClassGameController::MaybeSuggestMoreRounds()
 {
 	if(m_MoreRoundsSuggested)
@@ -1221,6 +1226,12 @@ void CInfClassGameController::OnCharacterSpawn(class CCharacter *pChr)
 			pPlayer->SetClass(ChooseHumanClass(pPlayer));
 		}
 	}
+}
+
+void CInfClassGameController::HandleCharacterDamageZone(CCharacter *pChr, int ZoneValue)
+{
+	CInfClassCharacter *pCharacter = GetInfCharacter(pChr);
+	pCharacter->GetClass()->HandleDamageZone(ZoneValue);
 }
 
 void CInfClassGameController::OnPlayerInfoChange(class CPlayer *pP)
