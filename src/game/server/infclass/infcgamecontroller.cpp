@@ -1228,6 +1228,12 @@ void CInfClassGameController::OnCharacterSpawn(class CCharacter *pChr)
 	}
 }
 
+void CInfClassGameController::HandleCharacterBonusZone(CCharacter *pChr, int ZoneValue)
+{
+	CInfClassCharacter *pCharacter = GetInfCharacter(pChr);
+	pCharacter->GetClass()->HandleBonusZone(ZoneValue);
+}
+
 void CInfClassGameController::HandleCharacterDamageZone(CCharacter *pChr, int ZoneValue)
 {
 	CInfClassCharacter *pCharacter = GetInfCharacter(pChr);

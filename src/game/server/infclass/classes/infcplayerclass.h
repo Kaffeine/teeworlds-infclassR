@@ -39,6 +39,7 @@ public:
 	void Poison(int Count, int From);
 
 	// Events
+	virtual void HandleBonusZone(int ZoneValue);
 	virtual void HandleDamageZone(int ZoneValue);
 
 	virtual void OnCharacterTick();

@@ -28,6 +28,7 @@ public:
 	bool OnEntity(const char* pName, vec2 Pivot, vec2 P0, vec2 P1, vec2 P2, vec2 P3, int PosEnv) override;
 	int OnCharacterDeath(class CCharacter *pVictim, class CPlayer *pKiller, int Weapon) override;
 	void OnCharacterSpawn(class CCharacter *pChr) override;
+	void HandleCharacterBonusZone(class CCharacter *pChr, int ZoneValue) override;
 	void HandleCharacterDamageZone(class CCharacter *pChr, int ZoneValue) override;
 	void OnPlayerInfoChange(class CPlayer *pP) override;
 	void DoWincheck() override;
