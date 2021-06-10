@@ -156,6 +156,10 @@ void CInfClassPlayerClass::OnPlayerClassChanged()
 	}
 }
 
+void CInfClassPlayerClass::HandleBonusZone(int ZoneValue)
+{
+}
+
 void CInfClassPlayerClass::HandleDamageZone(int ZoneValue)
 {
 	if(ZoneValue == ZONE_DAMAGE_DEATH)

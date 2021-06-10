@@ -424,6 +424,10 @@ void IGameController::OnCharacterSpawn(class CCharacter *pChr)
 	pChr->GiveWeapon(WEAPON_GUN, 10);
 }
 
+void IGameController::HandleCharacterBonusZone(CCharacter *pChr, int ZoneValue)
+{
+}
+
 void IGameController::HandleCharacterDamageZone(CCharacter *pChr, int ZoneValue)
 {
 }

@@ -70,7 +70,6 @@ m_pConsole(pConsole)
 	m_InAirTick = 0;
 	m_InWater = 0;
 	m_ProtectionTick = 0;
-	m_BonusTick = 0;
 	m_WaterJumpLifeSpan = 0;
 	m_NinjaVelocityBuff = 0;
 	m_NinjaStrengthBuff = 0;
@@ -750,29 +749,11 @@ void CCharacter::Tick()
 	//~ else
 		//~ m_InWater = 0;
 
-	if(IsHuman() && IsAlive() && GameServer()->m_pController->IsInfectionStarted())
 	{
 		int Index = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_icBonus, m_Pos.x, m_Pos.y);
-		if(Index == ZONE_BONUS_BONUS)
-		{
-			m_BonusTick++;
-			if(m_BonusTick > Server()->TickSpeed()*60)
-			{
-				m_BonusTick = 0;
-				
-				GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_SCORE, _("You have held a bonus area for one minute, +5 points"), NULL);
-				GameServer()->SendEmoticon(m_pPlayer->GetCID(), EMOTICON_MUSIC);
-				SetEmote(EMOTE_HAPPY, Server()->Tick() + Server()->TickSpeed());
-				GiveGift(GIFT_HEROFLAG);
-				
-				Server()->RoundStatistics()->OnScoreEvent(m_pPlayer->GetCID(), SCOREEVENT_BONUS, GetPlayerClass(), Server()->ClientName(m_pPlayer->GetCID()), Console());
-				GameServer()->SendScoreSound(m_pPlayer->GetCID());
-			}
-		}
+		GameServer()->m_pController->HandleCharacterBonusZone(this, Index);
 	}
-	else
-		m_BonusTick = 0;
-	
+
 	{
 		int Index0 = GameServer()->Collision()->GetZoneValueAt(GameServer()->m_ZoneHandle_icDamage, m_Pos.x+m_ProximityRadius/3.f, m_Pos.y-m_ProximityRadius/3.f);
 		GameServer()->m_pController->HandleCharacterDamageZone(this, Index0);

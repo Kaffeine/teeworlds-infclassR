@@ -127,6 +127,7 @@ public:
 	*/
 	virtual void OnCharacterSpawn(class CCharacter *pChr);
 
+	virtual void HandleCharacterBonusZone(class CCharacter *pChr, int ZoneValue);
 	virtual void HandleCharacterDamageZone(class CCharacter *pChr, int ZoneValue);
 
 	/*

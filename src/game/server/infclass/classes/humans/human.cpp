@@ -1,5 +1,6 @@
 #include "human.h"
 
+#include <engine/server/roundstatistics.h>
 #include <engine/shared/config.h>
 #include <game/server/classes.h>
 #include <game/server/gamecontext.h>
@@ -14,6 +15,34 @@ MACRO_ALLOC_POOL_ID_IMPL(CInfClassHuman, MAX_CLIENTS)
 CInfClassHuman::CInfClassHuman(CInfClassPlayer *pPlayer)
 	: CInfClassPlayerClass(pPlayer)
 {
+}
+
+void CInfClassHuman::HandleBonusZone(int ZoneValue)
+{
+	if(!GameServer()->m_pController->IsInfectionStarted() || !m_pCharacter->IsAlive())
+	{
+		return;
+	}
+
+	if(ZoneValue == ZONE_BONUS_BONUS)
+	{
+		m_BonusTick++;
+
+		if(m_BonusTick > Server()->TickSpeed()*60)
+		{
+			m_BonusTick = 0;
+
+			GameServer()->SendChatTarget_Localization(m_pPlayer->GetCID(), CHATCATEGORY_SCORE, _("You have held a bonus area for one minute, +5 points"), NULL);
+			GameServer()->SendEmoticon(m_pPlayer->GetCID(), EMOTICON_MUSIC);
+			m_pCharacter->SetEmote(EMOTE_HAPPY, Server()->Tick() + Server()->TickSpeed());
+			m_pCharacter->GiveGift(GIFT_HEROFLAG);
+
+			Server()->RoundStatistics()->OnScoreEvent(m_pPlayer->GetCID(), SCOREEVENT_BONUS,
+			                                          m_pCharacter->GetPlayerClass(),
+			                                          Server()->ClientName(m_pPlayer->GetCID()), m_pCharacter->Console());
+			GameServer()->SendScoreSound(m_pPlayer->GetCID());
+		}
+	}
 }
 
 void CInfClassHuman::HandleDamageZone(int ZoneValue)
@@ -56,6 +85,13 @@ void CInfClassHuman::OnCharacterTick()
 			m_pCharacter->m_PositionLocked = false;
 		}
 	}
+}
+
+void CInfClassHuman::OnCharacterSpawned()
+{
+	CInfClassPlayerClass::OnCharacterSpawned();
+
+	m_BonusTick = 0;
 }
 
 void CInfClassHuman::OnCharacterDeath(int Killer, int Weapon)

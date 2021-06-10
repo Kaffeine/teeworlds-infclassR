@@ -14,9 +14,11 @@ public:
 
 	bool IsHuman() const final { return true; }
 
+	void HandleBonusZone(int ZoneValue) override;
 	void HandleDamageZone(int ZoneValue) override;
 
 	void OnCharacterTick() override;
+	void OnCharacterSpawned() override;
 	void OnCharacterDeath(int Killer, int Weapon) override;
 	void OnThisKilledAnotherCharacter() override;
 
@@ -30,6 +32,8 @@ protected:
 
 	void GiveClassAttributes() override;
 	void SetupSkin(CTeeInfo *output) override;
+
+	int m_BonusTick = 0;
 };
 
 #endif // GAME_SERVER_INFCLASS_CLASSES_HUMAN_H
