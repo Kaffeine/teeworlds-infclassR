@@ -72,7 +72,7 @@ void CInfClassHuman::HandleDamageZone(int ZoneValue)
 			m_pCharacter->Freeze(Config()->m_InfInfzoneFreezeDuration, GetCID(), FREEZEREASON_INFECTION);
 		}
 
-		m_pPlayer->Infect(pKiller);
+		m_pPlayer->StartInfection(pKiller);
 	}
 }
 
@@ -99,7 +99,7 @@ void CInfClassHuman::OnCharacterDeath(int Killer, int Weapon)
 	CInfClassPlayerClass::OnCharacterDeath(Killer, Weapon);
 
 	CInfClassPlayer* pKillerPlayer = GameController()->GetPlayer(Killer);
-	m_pPlayer->Infect(pKillerPlayer);
+	m_pPlayer->StartInfection(pKillerPlayer);
 }
 
 void CInfClassHuman::OnThisKilledAnotherCharacter()
