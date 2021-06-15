@@ -553,11 +553,11 @@ void CPlayer::StartInfection(bool force, CPlayer *pInfectiousPlayer)
 	{
 		m_InfectionTick = Server()->Tick();
 	}
-	
+
+	GameServer()->m_pController->BeforePlayerInfected(this, pInfectiousPlayer);
+
 	int c = GameServer()->m_pController->ChooseInfectedClass(this);
-	
 	SetClass(c);
-	GameServer()->m_pController->OnPlayerInfected(this, pInfectiousPlayer);
 }
 
 void CPlayer::ResetInfectedClass()

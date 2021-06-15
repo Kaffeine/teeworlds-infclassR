@@ -40,7 +40,7 @@ public:
 	bool IsChoosableClass(int PlayerClass);
 	bool CanVote() override;
 	void OnClientDrop(int ClientID, int Type) override;
-	void OnPlayerInfected(CPlayer* pPlayer, CPlayer* pInfectiousPlayer) override;
+	void BeforePlayerInfected(CPlayer* pPlayer, CPlayer* pInfectiousPlayer) override;
 	bool IsInfectionStarted() override;
 	bool PortalsAvailableForCharacter(class CCharacter *pCharacter) override;
 	bool AreTurretsEnabled() const;
