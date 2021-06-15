@@ -530,6 +530,11 @@ void CPlayer::StartInfection(bool force, CPlayer *pInfectiousPlayer)
 	GameServer()->m_pController->OnPlayerInfected(this, pInfectiousPlayer);
 }
 
+void CPlayer::ResetInfectedClass()
+{
+	StartInfection(true);
+}
+
 bool CPlayer::IsZombie() const
 {
 	return (m_class > END_HUMANCLASS);
