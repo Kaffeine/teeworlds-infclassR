@@ -508,26 +508,24 @@ int CPlayer::LastHumanClass() const
 	return m_LastHumanClass;
 }
 
-void CPlayer::StartInfection(CPlayer *pInfectiousPlayer, bool force)
+void CPlayer::StartInfection(CPlayer *pInfectiousPlayer)
 {
-	if(!force && IsZombie())
+	if(IsZombie())
 		return;
-	
-	
+
 	if(IsHuman())
 	{
 		m_InfectionTick = Server()->Tick();
 	}
 
 	GameServer()->m_pController->BeforePlayerInfected(this, pInfectiousPlayer);
-
-	int c = GameServer()->m_pController->ChooseInfectedClass(this);
-	SetClass(c);
+	ResetInfectedClass();
 }
 
 void CPlayer::ResetInfectedClass()
 {
-	StartInfection(nullptr, true);
+	int c = GameServer()->m_pController->ChooseInfectedClass(this);
+	SetClass(c);
 }
 
 bool CPlayer::IsZombie() const
