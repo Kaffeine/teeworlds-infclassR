@@ -155,8 +155,7 @@ public:
 	bool IsActuallyZombie() const;
 	bool IsHuman() const;
 	bool IsSpectator() const;
-	void Infect(CPlayer* pInfectiousPlayer);
-	void StartInfection(bool force = false, CPlayer* pInfectiousPlayer = nullptr);
+	void StartInfection(CPlayer* pInfectiousPlayer = nullptr, bool force = false);
 	void ResetInfectedClass();
 	bool IsKnownClass(int c);
 	

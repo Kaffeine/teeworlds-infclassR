@@ -508,12 +508,7 @@ int CPlayer::LastHumanClass() const
 	return m_LastHumanClass;
 }
 
-void CPlayer::Infect(CPlayer *pInfectiousPlayer)
-{
-	StartInfection(/* force */ false, pInfectiousPlayer);
-}
-
-void CPlayer::StartInfection(bool force, CPlayer *pInfectiousPlayer)
+void CPlayer::StartInfection(CPlayer *pInfectiousPlayer, bool force)
 {
 	if(!force && IsZombie())
 		return;
@@ -532,7 +527,7 @@ void CPlayer::StartInfection(bool force, CPlayer *pInfectiousPlayer)
 
 void CPlayer::ResetInfectedClass()
 {
-	StartInfection(true);
+	StartInfection(nullptr, true);
 }
 
 bool CPlayer::IsZombie() const
