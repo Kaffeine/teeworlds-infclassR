@@ -87,13 +87,13 @@ void CInfClassInfected::OnCharacterDeath(int Killer, int Weapon)
 			}
 			break;
 		case PLAYERCLASS_WITCH:
-			m_pPlayer->StartInfection(true);
+			m_pPlayer->ResetInfectedClass();
 			GameServer()->SendBroadcast_Localization(-1, BROADCAST_PRIORITY_GAMEANNOUNCE,
 			                                         BROADCAST_DURATION_GAMEANNOUNCE, _("The witch is dead"), NULL);
 			GameServer()->CreateSoundGlobal(SOUND_CTF_RETURN);
 			break;
 		case PLAYERCLASS_UNDEAD:
-			m_pPlayer->StartInfection(true);
+			m_pPlayer->ResetInfectedClass();
 			GameServer()->SendBroadcast_Localization(-1, BROADCAST_PRIORITY_GAMEANNOUNCE,
 			                                         BROADCAST_DURATION_GAMEANNOUNCE, _("The undead is finally dead"), NULL);
 			GameServer()->CreateSoundGlobal(SOUND_CTF_RETURN);

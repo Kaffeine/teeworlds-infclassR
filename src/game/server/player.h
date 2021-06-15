@@ -172,6 +172,7 @@ public:
 	bool IsSpectator() const;
 	void Infect(CPlayer* pInfectiousPlayer);
 	void StartInfection(bool force = false, CPlayer* pInfectiousPlayer = nullptr);
+	void ResetInfectedClass();
 	bool IsKnownClass(int c);
 	
 	const char* GetLanguage();
