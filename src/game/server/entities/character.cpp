@@ -1059,11 +1059,6 @@ void CCharacter::Tick()
 		}
 	}
 	
-	if(m_pPlayer->MapMenu() == 1)
-	{
-		HandleMapMenu();
-	}
-		
 	if(GetPlayerClass() == PLAYERCLASS_ENGINEER)
 	{
 		CEngineerWall* pCurrentWall = NULL;

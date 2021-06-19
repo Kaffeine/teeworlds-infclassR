@@ -1574,6 +1574,14 @@ void CInfClassCharacter::PreCoreTick()
 	UpdateTuningParam();
 }
 
+void CInfClassCharacter::PostCoreTick()
+{
+	if(m_pPlayer->MapMenu() == 1)
+	{
+		HandleMapMenu();
+	}
+}
+
 void CInfClassCharacter::UpdateTuningParam()
 {
 	CTuningParams* pTuningParams = &m_pPlayer->m_NextTuningParams;
