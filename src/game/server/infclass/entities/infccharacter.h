@@ -65,6 +65,9 @@ public:
 
 	bool CanDie() const;
 
+	bool IsInvisible() const;
+	bool HasHallucination() const;
+
 	void FireSoldierBomb();
 	void PlacePortal(WeaponFireContext *pFireContext);
 	CPortal *FindPortalInTarget();
