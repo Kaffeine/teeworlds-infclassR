@@ -35,6 +35,8 @@ protected:
 	void GiveClassAttributes() override;
 	void SetupSkin(CTeeInfo *output) override;
 
+	void SetHookOnLimit(bool OnLimit);
+
 	int m_SlimeHealTick = 0;
 	int m_InfZoneHealTick = 0;
 
@@ -42,6 +44,8 @@ protected:
 	int m_VoodooKiller; // Save killer + weapon for delayed kill message
 	int m_VoodooWeapon = 0;
 	bool m_VoodooAboutToDie = false;
+
+	bool m_HookOnTheLimit = false;
 };
 
 #endif // GAME_SERVER_INFCLASS_CLASSES_INFECTED_H
