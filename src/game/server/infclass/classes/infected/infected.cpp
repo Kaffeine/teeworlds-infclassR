@@ -59,6 +59,11 @@ void CInfClassInfected::OnCharacterTick()
 			NULL
 		);
 	}
+	if(PlayerClass() == PLAYERCLASS_SPIDER)
+	{
+		const bool HookIsOnTheLimit = m_pCharacter->WebHookLength() > Config()->m_InfSpiderWebHookLength - 48.0f;
+		SetHookOnLimit(HookIsOnTheLimit);
+	}
 }
 
 void CInfClassInfected::OnCharacterSpawned()
@@ -128,7 +133,14 @@ void CInfClassInfected::SetupSkin(CTeeInfo *output)
 			output->SetSkinName("pinky");
 			output->m_UseCustomColor = 1;
 			output->m_ColorBody = 3866368;
-			output->m_ColorFeet = 65414;
+			if(m_HookOnTheLimit)
+			{
+				output->m_ColorFeet = 16776960; // Dark red
+			}
+			else
+			{
+				output->m_ColorFeet = 65414;
+			}
 			break;
 		case PLAYERCLASS_GHOUL:
 			output->SetSkinName("cammo");
@@ -174,6 +186,15 @@ void CInfClassInfected::SetupSkin(CTeeInfo *output)
 			output->m_UseCustomColor = 0;
 			output->SetSkinName("default");
 	}
+}
+
+void CInfClassInfected::SetHookOnLimit(bool OnLimit)
+{
+	if(m_HookOnTheLimit == OnLimit)
+		return;
+
+	m_HookOnTheLimit = OnLimit;
+	UpdateSkin();
 }
 
 void CInfClassInfected::OnSlimeEffect(int Owner)
