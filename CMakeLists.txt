@@ -790,3 +790,28 @@ set_glob(MASTERSRV_SRC GLOB src/mastersrv mastersrv.cpp mastersrv.h)
 set(TARGET_MASTERSRV mastersrv)
 
 add_executable(${TARGET_MASTERSRV} EXCLUDE_FROM_ALL ${MASTERSRV_SRC} $<TARGET_OBJECTS:engine-shared> ${DEPS})
+
+########################################################################
+# INSTALLATION
+########################################################################
+
+install(
+  DIRECTORY
+    "data/"
+  DESTINATION
+    "data"
+)
+install(
+  TARGETS
+    ${TARGET_SERVER}
+  DESTINATION
+    "${CMAKE_INSTALL_PREFIX}"
+)
+install(
+  FILES
+    "autoexec.cfg"
+    "reset.cfg"
+    "storage.cfg"
+  DESTINATION
+    "${CMAKE_INSTALL_PREFIX}"
+)
