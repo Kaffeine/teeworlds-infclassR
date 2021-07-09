@@ -277,7 +277,7 @@ bool CMapConverter::Load()
 
 const char *CMapConverter::GetConverterVersionId()
 {
-	return "v2";
+	return "v2+e";
 }
 
 void CMapConverter::InitQuad(CQuad* pQuad)
