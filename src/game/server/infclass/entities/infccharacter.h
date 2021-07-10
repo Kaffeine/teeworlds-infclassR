@@ -6,6 +6,7 @@
 class CGameContext;
 class CInfClassGameController;
 class CInfClassPlayerClass;
+class CVoltageBox;
 
 struct WeaponFireContext
 {
@@ -75,9 +76,11 @@ public:
 
 	void CheckSuperWeaponAccess();
 	void MaybeGiveStunGrenades();
+	void FireElectricianBox();
 	void FireSoldierBomb();
 	void PlacePortal(WeaponFireContext *pFireContext);
 	CPortal *FindPortalInTarget();
+	CVoltageBox *GetVoltageBox();
 	void OnPortalDestroy(CPortal *pPortal);
 	bool ProcessCharacterOnPortal(CPortal *pPortal, CCharacter *pCharacter);
 	bool CanOpenPortals() const;

@@ -153,6 +153,11 @@ MACRO_CONFIG_INT(InfSlowMotionHookAccel, inf_slow_motion_hook_accel, 15, 0, 100,
 MACRO_CONFIG_INT(InfSlowMotionMaxSpeed, inf_slow_motion_max_speed, 50, 0, 500, CFGFLAG_SERVER, "Create a speed limit while in slowmotion, make it 0 to disable it")
 MACRO_CONFIG_INT(InfSlowMotionGravity, inf_slow_motion_gravity, 5, -100, 100, CFGFLAG_SERVER, "Modify gravity while in slowmotion")
 
+// Electrician class config
+MACRO_CONFIG_INT(InfVoltageBoxCharges, inf_voltage_box_charges, 2, 0, 100, CFGFLAG_SERVER, "The number of voltage box charges")
+MACRO_CONFIG_INT(InfVoltageBoxLinkLength, inf_voltage_box_link_length, 640, 0, 10000, CFGFLAG_SERVER, "The maximum length of a voltage box link")
+MACRO_CONFIG_INT(InfVoltageBoxDischargeDuration, inf_voltage_box_discharge_duration, 1000, 0, 10000, CFGFLAG_SERVER, "The duration of a voltage box discharge (in ms)")
+
 //Turret
 MACRO_CONFIG_INT(InfMinPlayersForTurrets, inf_min_players_for_turrets, 3, 0, 100, CFGFLAG_SERVER, "Minimum number of players that are needed to enable turrets")
 MACRO_CONFIG_INT(InfTurretEnable, inf_turret_enable, 1, 0, 1, CFGFLAG_SERVER, "If turrets are available")

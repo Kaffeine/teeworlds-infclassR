@@ -15,12 +15,15 @@ public:
 	bool IsHuman() const final { return true; }
 
 	void OnCharacterPreCoreTick() override;
+	void OnCharacterTick() override;
 	void OnSlimeEffect(int Owner) override;
 
 	static bool SetupSkin(int PlayerClass, CTeeInfo *output);
+	static void RegisterHelpPages(int PlayerClass);
 
 protected:
 	void GiveClassAttributes() override;
+	void DestroyChildEntities() override;
 	void SetupSkin(CTeeInfo *output) override;
 };
 

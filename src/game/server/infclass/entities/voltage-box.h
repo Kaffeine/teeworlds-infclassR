@@ -8,20 +8,71 @@
 class CVoltageBox : public CInfCEntity
 {
 public:
+	enum DISCHARGE_TYPE
+	{
+		DISCHARGE_TYPE_INVALID,
+		DISCHARGE_TYPE_NORMAL,
+		DISCHARGE_TYPE_FINAL,
+		DISCHARGE_TYPE_FREE,
+	};
+
 	static int EntityId;
+	static const int MaxLinks = 8;
+	static const int IndicatorItems = 12;
 
 	CVoltageBox(CGameContext *pGameContext, vec2 CenterPos, int Owner);
 	~CVoltageBox() override;
 
+	void AddLink(int ClientID);
+	void RemoveLink(int ClientID);
+	void ScheduleDischarge(DISCHARGE_TYPE Type = DISCHARGE_TYPE_NORMAL);
+
+	void Tick() override;
+	void TickPaused() override;
 	void Snap(int SnappingClient) override;
-	
+
 protected:
+	void AddSnapItem(const vec2 &From, const vec2 &To, int SnapTick);
+	void PrepareSnapItems();
+	void PrepareTheBoxSnapItems();
+	void PrepareTheLinksSnapItems();
+
+	void ClearLinks();
+
+	void UpdateLinks();
+	void DoDischarge();
+	void SnapDrawRadiusIndicator();
+
+	int GetStartTickForDistance(float Progress);
+
 	enum
 	{
-		EDGES = 4,
+		BoxEdges = 4,
 	};
 
-	int m_ExtraIDs[EDGES];
+	struct LaserSnapItem
+	{
+		ivec2 From;
+		ivec2 To;
+		int StartTick;
+		int SnapID;
+	};
+	static const int MaxSnapItems = BoxEdges + 1 + MaxLinks;
+
+	struct Link
+	{
+		vec2 Endpoint;
+		int ClientID;
+	};
+
+	LaserSnapItem m_LasersForSnap[MaxSnapItems];
+	int m_ActiveSnapItems = 0;
+
+	int m_Charges = 0;
+	int m_LinksCount = 0;
+	Link m_Links[MaxLinks];
+	int m_OwnerRadiusIndicatorsIDs[IndicatorItems];
+	DISCHARGE_TYPE m_ScheduledDischarge = DISCHARGE_TYPE_INVALID;
 };
 
 #endif // GAME_SERVER_INFCLASS_ENTITIES_VOLTAGE_BOX_H
