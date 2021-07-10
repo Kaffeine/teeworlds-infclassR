@@ -11,6 +11,7 @@
 
 #include <game/server/infclass/entities/biologist-mine.h>
 #include <game/server/infclass/entities/bouncing-bullet.h>
+#include <game/server/infclass/entities/electrician-laser.h>
 #include <game/server/infclass/entities/engineer-wall.h>
 #include <game/server/infclass/entities/growingexplosion.h>
 #include <game/server/infclass/entities/hero-flag.h>
@@ -351,8 +352,7 @@ void CInfClassCharacter::OnHammerFired(WeaponFireContext *pFireContext)
 	}
 	else if(GetPlayerClass() == PLAYERCLASS_ELECTRICIAN)
 	{
-		new CVoltageBox(GameServer(), GetPos(), m_pPlayer->GetCID());
-		GameServer()->CreateSound(GetPos(), SOUND_LASER_FIRE);
+		FireElectricianBox();
 	}
 	else if(GetPlayerClass() == PLAYERCLASS_LOOPER)
 	{
@@ -1018,6 +1018,20 @@ void CInfClassCharacter::OnLaserFired(WeaponFireContext *pFireContext)
 			GameServer()->CreateSound(GetPos(), SOUND_LASER_FIRE);
 		}
 	}
+	else if(GetPlayerClass() == PLAYERCLASS_ELECTRICIAN)
+	{
+		CVoltageBox *pOwnedBox = GetVoltageBox();
+
+		if(pOwnedBox)
+		{
+			new CElectricianLaser(GameServer(), GetPos(), Direction, GameServer()->Tuning()->m_LaserReach, GetCID());
+			GameServer()->CreateSound(GetPos(), SOUND_LASER_FIRE);
+		}
+		else
+		{
+			pFireContext->FireAccepted = false;
+		}
+	}
 	else
 	{
 		new CInfClassLaser(GameServer(), GetPos(), Direction, GameServer()->Tuning()->m_LaserReach, m_pPlayer->GetCID(), Damage);
@@ -1418,6 +1432,30 @@ bool CInfClassCharacter::HasHallucination() const
 	return m_HallucinationTick > 0;
 }
 
+void CInfClassCharacter::FireElectricianBox()
+{
+	CVoltageBox *pOwnedBox = nullptr;
+	//Potential variable name conflicts with engineers wall (for example *pWall is used twice for both Looper and Engineer)
+	for(CVoltageBox *pBox = (CVoltageBox*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_VOLTAGE_BOX); pBox; pBox = (CVoltageBox*) pBox->TypeNext())
+	{
+		if(pBox->GetOwner() == GetCID())
+		{
+			pOwnedBox = pBox;
+			break;
+		}
+	}
+
+	if(pOwnedBox)
+	{
+		pOwnedBox->Discharge();
+	}
+	else
+	{
+		new CVoltageBox(GameServer(), GetPos(), m_pPlayer->GetCID());
+		GameServer()->CreateSound(GetPos(), SOUND_LASER_FIRE);
+	}
+}
+
 void CInfClassCharacter::FireSoldierBomb()
 {
 	vec2 ProjStartPos = GetPos()+GetDirection()*GetProximityRadius()*0.75f;
@@ -1538,6 +1576,19 @@ CPortal *CInfClassCharacter::FindPortalInTarget()
 	if(m_pPortalOut && (distance(m_pPortalOut->GetPos(), TargetPos) < m_ProximityRadius + m_pPortalOut->GetRadius() + displacementExtraDistance))
 	{
 		return m_pPortalOut;
+	}
+
+	return nullptr;
+}
+
+CVoltageBox *CInfClassCharacter::GetVoltageBox()
+{
+	for(CVoltageBox *pBox = (CVoltageBox*) GameWorld()->FindFirst(CGameWorld::ENTTYPE_VOLTAGE_BOX); pBox; pBox = (CVoltageBox*) pBox->TypeNext())
+	{
+		if(pBox->GetOwner() == GetCID())
+		{
+			return pBox;
+		}
 	}
 
 	return nullptr;

@@ -230,6 +230,8 @@ void CInfClassPlayerClass::OnCharacterDeath(int Killer, int Weapon)
 	if (m_pCharacter->m_Core.m_Passenger) {
 		m_pCharacter->m_Core.SetPassenger(nullptr);
 	}
+
+	DestroyChildEntities();
 }
 
 void CInfClassPlayerClass::OnThisKilledAnotherCharacter()
@@ -294,6 +296,10 @@ void CInfClassPlayerClass::OnFloatingPointCollected(int Points)
 void CInfClassPlayerClass::GiveClassAttributes()
 {
 	m_pCharacter->TakeAllWeapons();
+}
+
+void CInfClassPlayerClass::DestroyChildEntities()
+{
 }
 
 void CInfClassPlayerClass::SetupSkin(CTeeInfo *output)

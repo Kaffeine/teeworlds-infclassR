@@ -32,6 +32,7 @@ protected:
 
 	void GiveClassAttributes() override;
 	void SetupSkin(CTeeInfo *output) override;
+	void DestroyChildEntities() override;
 
 	int m_BonusTick = 0;
 };

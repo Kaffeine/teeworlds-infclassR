@@ -6,6 +6,7 @@
 #include <game/server/gamecontext.h>
 #include <game/server/infclass/entities/infccharacter.h>
 #include <game/server/infclass/entities/superweapon-indicator.h>
+#include <game/server/infclass/entities/voltage-box.h>
 #include <game/server/infclass/infcgamecontroller.h>
 #include <game/server/infclass/infcplayer.h>
 #include <game/server/teeinfo.h>
@@ -83,6 +84,17 @@ void CInfClassHuman::OnCharacterTick()
 		if(m_pCharacter->m_Input.m_Jump && !m_pCharacter->m_PrevInput.m_Jump)
 		{
 			m_pCharacter->m_PositionLocked = false;
+		}
+	}
+	else if(PlayerClass() == PLAYERCLASS_ELECTRICIAN)
+	{
+		if(m_pCharacter->m_ActiveWeapon == WEAPON_LASER)
+		{
+			CVoltageBox *pBox = m_pCharacter->GetVoltageBox();
+			if(!pBox)
+			{
+				GameServer()->SendBroadcast_Localization(GetPlayer()->GetCID(), BROADCAST_PRIORITY_WEAPONSTATE, 60, "No VoltageBox to make a link");
+			}
 		}
 	}
 }
@@ -324,6 +336,18 @@ void CInfClassHuman::MaybeGiveStunGrenades()
 void CInfClassHuman::SetupSkin(CTeeInfo *output)
 {
 	SetupSkin(PlayerClass(), output);
+}
+
+void CInfClassHuman::DestroyChildEntities()
+{
+	if(PlayerClass() == PLAYERCLASS_ELECTRICIAN)
+	{
+		CVoltageBox *pBox = m_pCharacter->GetVoltageBox();
+		if(pBox)
+		{
+			pBox->Reset();
+		}
+	}
 }
 
 void CInfClassHuman::OnSlimeEffect(int Owner)

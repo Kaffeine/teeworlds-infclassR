@@ -49,7 +49,7 @@ void CPlayer::Reset()
 	m_ScoreRound = 0;
 	m_ScoreMode = PLAYERSCOREMODE_SCORE;
 	m_WinAsHuman = 0;
-	m_class = PLAYERCLASS_NONE;
+	m_class = PLAYERCLASS_INVALID;
 	m_LastHumanClass = PLAYERCLASS_NONE;
 	m_InfectionTick = -1;
 	m_NumberKills = 0;
