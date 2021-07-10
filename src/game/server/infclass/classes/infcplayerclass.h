@@ -74,6 +74,7 @@ public:
 
 protected:
 	virtual void GiveClassAttributes();
+	virtual void DestroyChildEntities();
 	virtual void SetupSkin(CTeeInfo *output);
 
 	CInfClassPlayer *m_pPlayer = nullptr;
