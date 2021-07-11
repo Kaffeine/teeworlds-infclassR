@@ -72,6 +72,16 @@ void CInfClassCharacter::OnCharacterSpawned()
 		m_pClass->OnCharacterSpawned();
 }
 
+void CInfClassCharacter::Destroy()
+{
+	if(m_pClass)
+		m_pClass->SetCharacter(nullptr);
+
+	m_pClass = nullptr;
+
+	CCharacter::Destroy();
+}
+
 void CInfClassCharacter::Tick()
 {
 	CCharacter::Tick();
