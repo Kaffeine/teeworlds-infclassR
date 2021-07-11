@@ -218,6 +218,7 @@ int CInfClassGameController::GetClassByName(const char *pClassName, bool *pOk)
 		ExtraName("engi", PLAYERCLASS_ENGINEER),
 		ExtraName("bio", PLAYERCLASS_BIOLOGIST),
 		ExtraName("bios", PLAYERCLASS_BIOLOGIST),
+		ExtraName("el", PLAYERCLASS_ELECTRICIAN),
 	};
 	if(pOk)
 	{
