@@ -1726,6 +1726,17 @@ void CInfClassCharacter::GiveRandomClassSelectionBonus()
 	IncreaseArmor(10);
 }
 
+void CInfClassCharacter::MakeVisible()
+{
+	if(m_IsInvisible)
+	{
+		GameServer()->CreatePlayerSpawn(m_Pos);
+		m_IsInvisible = false;
+	}
+
+	m_InvisibleTick = Server()->Tick();
+}
+
 void CInfClassCharacter::PreCoreTick()
 {
 	if(m_pClass)
