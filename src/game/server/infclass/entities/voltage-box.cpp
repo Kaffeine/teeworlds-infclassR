@@ -12,6 +12,7 @@
 int CVoltageBox::EntityId = CGameWorld::ENTTYPE_VOLTAGE_BOX;
 static constexpr int BoxProximityRadius = 24;
 static constexpr int BasicDamage = 10;
+static constexpr int LinkFieldRadius = 16;
 
 static constexpr int InvalidClientID = -1;
 static const vec2 DamageForce(0, 0);
@@ -315,7 +316,7 @@ void CVoltageBox::UpdateLinks()
 			{
 				const vec2 IntersectPos = closest_point_on_line(GetPos(), m_Links[i].Endpoint, p->GetPos());
 				float Len = distance(p->GetPos(), IntersectPos);
-				if(Len < p->GetProximityRadius())
+				if(Len < (p->GetProximityRadius() + LinkFieldRadius))
 				{
 					p->MakeVisible();
 				}
@@ -341,7 +342,7 @@ void CVoltageBox::DoDischarge()
 			const vec2 &LinkEndpoint = m_Links[i].Endpoint;
 			const vec2 IntersectPos = closest_point_on_line(GetPos(), LinkEndpoint, p->GetPos());
 			float Len = distance(p->GetPos(), IntersectPos);
-			if(Len < p->GetProximityRadius())
+			if(Len < (p->GetProximityRadius() + LinkFieldRadius))
 			{
 				p->TakeDamage(DamageForce, BasicDamage, GetOwner(), WEAPON_LASER, TAKEDAMAGEMODE_NOINFECTION);
 			}
