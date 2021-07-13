@@ -3525,6 +3525,23 @@ bool CGameContext::ConHelp(IConsole::IResult *pResult, void *pUserData)
 			
 			pSelf->SendMOTD(ClientID, Buffer.buffer());
 		}
+		else if(str_comp_nocase(pHelpPage, "electrician") == 0)
+		{
+			Buffer.append("~~ ");
+			pSelf->Server()->Localization()->Format_L(Buffer, pLanguage, _("Electrician"), NULL);
+			Buffer.append(" ~~\n\n");
+			pSelf->Server()->Localization()->Format_L(Buffer, pLanguage, _("The Electrician can use the hammer to place a High Voltage Box."), NULL);
+			Buffer.append("\n\n");
+			pSelf->Server()->Localization()->Format_L(Buffer, pLanguage, _("The placed box will be linked to the Electrician. Subsequent use of the hammer triggers the box discharging."), NULL);
+			Buffer.append("\n\n");
+			pSelf->Server()->Localization()->Format_L(Buffer, pLanguage, _("The Discharges hit all zombies on the links."), NULL);
+			Buffer.append("\n\n");
+			pSelf->Server()->Localization()->Format_L(Buffer, pLanguage, _("The Electrician's Laser doesn't deal any damage but creates a link between the box and the target zombie."), NULL);
+			Buffer.append("\n\n");
+			pSelf->Server()->Localization()->Format_L(Buffer, pLanguage, _("A linked zombie will be always one-shot by a Discharge. If a linked zombie moves out of box's range a Discharge will happen and it will die."), NULL);
+
+			pSelf->SendMOTD(ClientID, Buffer.buffer());
+		}
 		else if(str_comp_nocase(pHelpPage, "soldier") == 0)
 		{
 			Buffer.append("~~ ");
