@@ -618,6 +618,8 @@ set_glob(GAME_SERVER GLOB_RECURSE src/game/server
   infclass/entities/infcentity.h
   infclass/entities/laser-teleport.cpp
   infclass/entities/laser-teleport.h
+  infclass/entities/lightning-laser.cpp
+  infclass/entities/lightning-laser.h
   infclass/entities/looper-wall.cpp
   infclass/entities/looper-wall.h
   infclass/entities/medic-grenade.cpp
