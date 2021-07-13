@@ -17,6 +17,7 @@
 #include <game/server/infclass/entities/hero-flag.h>
 #include <game/server/infclass/entities/infc-laser.h>
 #include <game/server/infclass/entities/laser-teleport.h>
+#include <game/server/infclass/entities/lightning-laser.h>
 #include <game/server/infclass/entities/looper-wall.h>
 #include <game/server/infclass/entities/medic-grenade.h>
 #include <game/server/infclass/entities/merc-bomb.h>
@@ -804,6 +805,14 @@ void CInfClassCharacter::OnShotgunFired(WeaponFireContext *pFireContext)
 		return;
 
 	vec2 Direction = GetDirection();
+
+	if(GetPlayerClass() == PLAYERCLASS_ELECTRICIAN)
+	{
+		new CLightningLaser(GameServer(), GetPos(), Direction, GameServer()->Tuning()->m_LaserReach, GetCID());
+		GameServer()->CreateSound(GetPos(), SOUND_LASER_FIRE);
+		return;
+	}
+
 	vec2 ProjStartPos = GetPos()+Direction*GetProximityRadius()*0.75f;
 
 	int ShotSpread = 3;
