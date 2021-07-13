@@ -24,7 +24,7 @@ CVoltageBox::CVoltageBox(CGameContext *pGameContext, vec2 CenterPos, int Owner)
 
 	m_Charges = Config()->m_InfVoltageBoxCharges;
 
-	for(LaserSnapItem &SnapItem : m_LasersForSnap)
+	for(CLaserSnapItem &SnapItem : m_LasersForSnap)
 	{
 		SnapItem.SnapID = Server()->SnapNewID();
 	}
@@ -34,13 +34,13 @@ CVoltageBox::CVoltageBox(CGameContext *pGameContext, vec2 CenterPos, int Owner)
 		IndicatorID = Server()->SnapNewID();
 	}
 
-	ClearLinks();
+	m_Links.Clear();
 	AddLink(Owner);
 }
 
 CVoltageBox::~CVoltageBox()
 {
-	for(const LaserSnapItem &SnapItem : m_LasersForSnap)
+	for(const CLaserSnapItem &SnapItem : m_LasersForSnap)
 	{
 		Server()->SnapFreeID(SnapItem.SnapID);
 	}
@@ -60,51 +60,33 @@ void CVoltageBox::AddLink(int ClientID)
 		return;
 	}
 
-	for(int i = 0; i < m_LinksCount; ++i)
+	for(int i = 0; i < m_Links.Size(); ++i)
 	{
-		if(m_Links[i].ClientID == ClientID)
+		if(m_Links.At(i).ClientID == ClientID)
 		{
 			// Already linked
 			return;
 		}
 	}
 
-	if (m_LinksCount + 1 >= MaxLinks)
+	if (m_Links.Capacity() == m_Links.Size())
 	{
 		// TODO: Warning
 		return;
 	}
 
-	m_Links[m_LinksCount].ClientID = ClientID;
-	m_Links[m_LinksCount].Endpoint = pCharacter->GetPos();
-	m_LinksCount++;
+	m_Links.Add(CLink(pCharacter->GetPos(), ClientID));
 }
 
 void CVoltageBox::RemoveLink(int ClientID)
 {
-	for(int i = 0; i < m_LinksCount; ++i)
+	for(int i = 0; i < m_Links.Size(); ++i)
 	{
 		if(m_Links[i].ClientID != ClientID)
 			continue;
 
-		if(i + 1 < m_LinksCount)
-		{
-			// This is not the last linked client. Swap.
-			m_Links[i] = m_Links[m_LinksCount - 1];
-		}
-
-		m_Links[m_LinksCount - 1].ClientID = InvalidClientID;
-		--m_LinksCount;
+		m_Links.RemoveAt(i);
 	}
-}
-
-void CVoltageBox::ClearLinks()
-{
-	for(Link &Link : m_Links)
-	{
-		Link.ClientID = InvalidClientID;
-	}
-	m_LinksCount = 0;
 }
 
 void CVoltageBox::ScheduleDischarge(DISCHARGE_TYPE Type)
@@ -249,9 +231,9 @@ void CVoltageBox::PrepareTheLinksSnapItems()
 	static const float DischargeHighlightLength = 32;
 
 	// Snap links
-	for(int i = 0; i < m_LinksCount; ++i)
+	for(int i = 0; i < m_Links.Size(); ++i)
 	{
-		const vec2 &Endpoint = m_Links[i].Endpoint;
+		const vec2 &Endpoint = m_Links.At(i).Endpoint;
 
 		float Distance = distance(Endpoint, GetPos());
 		if (Distance > MaxLength)
@@ -267,7 +249,7 @@ void CVoltageBox::UpdateLinks()
 {
 	const float MaxLength = Config()->m_InfVoltageBoxLinkLength;
 
-	for(int i = 0; i < m_LinksCount; ++i)
+	for(int i = 0; i < m_Links.Size(); ++i)
 	{
 		int ClientID = m_Links[i].ClientID;
 
@@ -312,9 +294,9 @@ void CVoltageBox::UpdateLinks()
 	{
 		if(p->GetPlayerClass() == PLAYERCLASS_GHOST)
 		{
-			for(int i = 0; i < m_LinksCount; ++i)
+			for(const CLink &Link : m_Links)
 			{
-				const vec2 IntersectPos = closest_point_on_line(GetPos(), m_Links[i].Endpoint, p->GetPos());
+				const vec2 IntersectPos = closest_point_on_line(GetPos(), Link.Endpoint, p->GetPos());
 				float Len = distance(p->GetPos(), IntersectPos);
 				if(Len < (p->GetProximityRadius() + LinkFieldRadius))
 				{
@@ -337,10 +319,9 @@ void CVoltageBox::DoDischarge()
 		if(p->IsHuman())
 			continue;
 
-		for(int i = 0; i < m_LinksCount; ++i)
+		for(const CLink &Link : m_Links)
 		{
-			const vec2 &LinkEndpoint = m_Links[i].Endpoint;
-			const vec2 IntersectPos = closest_point_on_line(GetPos(), LinkEndpoint, p->GetPos());
+			const vec2 IntersectPos = closest_point_on_line(GetPos(), Link.Endpoint, p->GetPos());
 			float Len = distance(p->GetPos(), IntersectPos);
 			if(Len < (p->GetProximityRadius() + LinkFieldRadius))
 			{
@@ -355,13 +336,12 @@ void CVoltageBox::DoDischarge()
 	}
 
 	// Kill the linked zombies
-	for(int i = 0; i < m_LinksCount; ++i)
+	for(const CLink &Link : m_Links)
 	{
-		int ClientID = m_Links[i].ClientID;
-		CInfClassCharacter *pCharacter = GameController()->GetCharacter(ClientID);
+		CInfClassCharacter *pCharacter = GameController()->GetCharacter(Link.ClientID);
 		if(!pCharacter)
 		{
-			GameServer()->CreateSound(m_Links[i].Endpoint, SOUND_LASER_BOUNCE);
+			GameServer()->CreateSound(Link.Endpoint, SOUND_LASER_BOUNCE);
 			continue;
 		}
 
@@ -388,7 +368,7 @@ void CVoltageBox::DoDischarge()
 			break;
 	}
 
-	ClearLinks();
+	m_Links.Clear();
 
 	if(m_Charges > 0)
 	{

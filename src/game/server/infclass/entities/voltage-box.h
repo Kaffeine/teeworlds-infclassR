@@ -5,6 +5,8 @@
 
 #include "infcentity.h"
 
+#include "base/tl/array_on_stack.h"
+
 class CVoltageBox : public CInfCEntity
 {
 public:
@@ -37,8 +39,6 @@ protected:
 	void PrepareTheBoxSnapItems();
 	void PrepareTheLinksSnapItems();
 
-	void ClearLinks();
-
 	void UpdateLinks();
 	void DoDischarge();
 	void SnapDrawRadiusIndicator();
@@ -50,7 +50,7 @@ protected:
 		BoxEdges = 4,
 	};
 
-	struct LaserSnapItem
+	struct CLaserSnapItem
 	{
 		ivec2 From;
 		ivec2 To;
@@ -59,18 +59,24 @@ protected:
 	};
 	static const int MaxSnapItems = BoxEdges + 1 + MaxLinks;
 
-	struct Link
+	struct CLink
 	{
+		CLink() = default;
+		CLink(const vec2 &E, int CID)
+			: Endpoint(E)
+			, ClientID(CID)
+		{
+		}
+
 		vec2 Endpoint;
 		int ClientID;
 	};
 
-	LaserSnapItem m_LasersForSnap[MaxSnapItems];
+	CLaserSnapItem m_LasersForSnap[MaxSnapItems];
 	int m_ActiveSnapItems = 0;
 
 	int m_Charges = 0;
-	int m_LinksCount = 0;
-	Link m_Links[MaxLinks];
+	array_on_stack<CLink, MaxLinks> m_Links;
 	int m_OwnerRadiusIndicatorsIDs[IndicatorItems];
 	DISCHARGE_TYPE m_ScheduledDischarge = DISCHARGE_TYPE_INVALID;
 };
