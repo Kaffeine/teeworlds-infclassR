@@ -1347,6 +1347,10 @@ void CInfClassCharacter::Die(int Killer, int Weapon)
 			{
 				Weapon = WEAPON_GRENADE;
 			}
+			else if(m_FreezeReason == FREEZEREASON_ELECTRICITY)
+			{
+				Weapon = WEAPON_LASER;
+			}
 			else
 			{
 				Weapon = WEAPON_NINJA;

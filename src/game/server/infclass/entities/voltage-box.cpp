@@ -345,6 +345,11 @@ void CVoltageBox::DoDischarge()
 			if(Len < (p->GetProximityRadius() + LinkFieldRadius))
 			{
 				p->TakeDamage(DamageForce, BasicDamage, GetOwner(), WEAPON_LASER, TAKEDAMAGEMODE_NOINFECTION);
+
+				if(p->IsAlive())
+				{
+					p->Freeze(1, GetOwner(), FREEZEREASON_ELECTRICITY);
+				}
 			}
 		}
 	}
