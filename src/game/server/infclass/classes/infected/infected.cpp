@@ -228,7 +228,10 @@ float CInfClassInfected::GetGhoulPercent() const
 
 bool CInfClassInfected::CanBeLinked() const
 {
-	return CanDie();
+	if((PlayerClass() == PLAYERCLASS_VOODOO) && m_VoodooAboutToDie)
+		return false;
+
+	return true;
 }
 
 void CInfClassInfected::IncreaseGhoulLevel(int Diff)
