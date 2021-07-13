@@ -416,6 +416,15 @@ const char *CInfClassGameController::GetClassDisplayName(int PlayerClass, const 
 	}
 }
 
+const char *CInfClassGameController::GetClanForClass(int PlayerClass, const char *pDefaultText)
+{
+	switch (PlayerClass)
+	{
+		default:
+			return GetClassDisplayName(PlayerClass, pDefaultText);
+	}
+}
+
 const char *CInfClassGameController::GetClassPluralDisplayName(int PlayerClass)
 {
 	switch (PlayerClass)
