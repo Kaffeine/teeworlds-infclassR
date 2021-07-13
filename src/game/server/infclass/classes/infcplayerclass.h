@@ -31,6 +31,7 @@ public:
 
 	virtual bool CanDie() const;
 	virtual float GetGhoulPercent() const;
+	virtual bool CanBeLinked() const; // For linking laser
 
 	// Temp stuff
 	void UpdateSkin();

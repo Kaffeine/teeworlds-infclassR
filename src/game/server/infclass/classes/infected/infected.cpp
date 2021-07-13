@@ -226,6 +226,11 @@ float CInfClassInfected::GetGhoulPercent() const
 	return GetPlayer()->GetGhoulPercent();
 }
 
+bool CInfClassInfected::CanBeLinked() const
+{
+	return CanDie();
+}
+
 void CInfClassInfected::IncreaseGhoulLevel(int Diff)
 {
 	GetPlayer()->IncreaseGhoulLevel(Diff);

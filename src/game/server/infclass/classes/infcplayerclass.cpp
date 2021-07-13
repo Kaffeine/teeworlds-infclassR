@@ -148,6 +148,11 @@ float CInfClassPlayerClass::GetGhoulPercent() const
 	return 0;
 }
 
+bool CInfClassPlayerClass::CanBeLinked() const
+{
+	return false;
+}
+
 int CInfClassPlayerClass::PlayerClass() const
 {
 	if(m_pCharacter)
