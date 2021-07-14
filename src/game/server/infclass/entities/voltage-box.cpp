@@ -263,9 +263,14 @@ void CVoltageBox::UpdateLinks()
 
 		if(!pCharacter->IsAlive())
 		{
-			// This will be a free discharge (because the owner left the area)
 			ScheduleDischarge(DISCHARGE_TYPE_FREE);
-			// Continue to update the other links position
+			continue;
+		}
+
+		if((ClientID != GetOwner()) && pCharacter->IsHuman())
+		{
+			// The character became a human (e.g. revived)
+			RemoveLink(ClientID);
 			continue;
 		}
 
