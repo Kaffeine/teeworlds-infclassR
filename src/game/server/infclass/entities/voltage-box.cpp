@@ -327,7 +327,7 @@ void CVoltageBox::DoDischarge()
 
 		GameServer()->CreateSound(pCharacter->GetPos(), SOUND_LASER_FIRE);
 
-		if(!pCharacter->IsHuman())
+		if(!pCharacter->IsHuman() && !pCharacter->IsInvincible())
 		{
 			pCharacter->Die(GetOwner(), WEAPON_LASER);
 		}
