@@ -13,6 +13,7 @@ int CVoltageBox::EntityId = CGameWorld::ENTTYPE_VOLTAGE_BOX;
 static constexpr int BoxProximityRadius = 24;
 static constexpr int BasicDamage = 10;
 static constexpr int LinkFieldRadius = 16;
+static constexpr float ElectricityFreezeDuration = 1;
 
 static constexpr int InvalidClientID = -1;
 static const vec2 DamageForce(0, 0);
@@ -309,6 +310,24 @@ void CVoltageBox::UpdateLinks()
 
 void CVoltageBox::DoDischarge()
 {
+	// Kill the linked zombies
+	for(const CLink &Link : m_Links)
+	{
+		CInfClassCharacter *pCharacter = GameController()->GetCharacter(Link.ClientID);
+		if(!pCharacter)
+		{
+			GameServer()->CreateSound(Link.Endpoint, SOUND_LASER_BOUNCE);
+			continue;
+		}
+
+		GameServer()->CreateSound(pCharacter->GetPos(), SOUND_LASER_FIRE);
+
+		if(!pCharacter->IsHuman())
+		{
+			pCharacter->Die(GetOwner(), WEAPON_LASER);
+		}
+	}
+
 	// Find other players on the links
 	for(int i = 0; i < MAX_CLIENTS; ++i)
 	{
@@ -329,27 +348,9 @@ void CVoltageBox::DoDischarge()
 
 				if(p->IsAlive())
 				{
-					p->Freeze(1, GetOwner(), FREEZEREASON_ELECTRICITY);
+					p->Freeze(ElectricityFreezeDuration, GetOwner(), FREEZEREASON_ELECTRICITY);
 				}
 			}
-		}
-	}
-
-	// Kill the linked zombies
-	for(const CLink &Link : m_Links)
-	{
-		CInfClassCharacter *pCharacter = GameController()->GetCharacter(Link.ClientID);
-		if(!pCharacter)
-		{
-			GameServer()->CreateSound(Link.Endpoint, SOUND_LASER_BOUNCE);
-			continue;
-		}
-
-		GameServer()->CreateSound(pCharacter->GetPos(), SOUND_LASER_FIRE);
-
-		if(!pCharacter->IsHuman())
-		{
-			pCharacter->Die(GetOwner(), WEAPON_LASER);
 		}
 	}
 
