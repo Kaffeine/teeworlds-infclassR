@@ -72,6 +72,7 @@ public:
 	bool CanDie() const;
 
 	bool IsInvisible() const;
+	bool IsInvincible() const; // Invincible here means "ignores all damage"
 	bool HasHallucination() const;
 
 	void CheckSuperWeaponAccess();
